@@ -1,0 +1,4 @@
+<div [ngClass]="id % 2 === 0 ? 'cell-odd' : 'cell-even'" (click)="onClick()">
+    <app-horse class="horse-block" *ngIf="isKnight"></app-horse>
+    <span *ngIf="moveNumber > 0" class="move-number">{{ moveNumber }}</span>
+</div>
