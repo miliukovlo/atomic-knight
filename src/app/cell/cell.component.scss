@@ -1,19 +1,22 @@
-.cell-odd {
+.cell {
     width: 100%; 
     height: 100%; 
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
     cursor: pointer;
 }
-.cell-even {
-    width: 100%; 
-    height: 100%; 
+.even {
     background-color: orangered;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
+}
+.odd {
+    background-color: white;
+}
+.dot {
+    height: 3vh;
+    width: 3vh;
+    border-radius: 50%;
 }
 .horse-block {
     width: 50%;

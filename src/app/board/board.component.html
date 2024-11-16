@@ -1,3 +1,4 @@
+<p *ngIf="lose">Вы проиграли!</p>
 <article class="board">
   <ng-container *ngFor="let row of board; let rowIndex = index">
     <ng-container *ngFor="let cell of row; let colIndex = index">
@@ -5,6 +6,7 @@
         [id]="rowIndex+colIndex" 
         [isKnight]="cell" 
         [moveNumber]="moves[rowIndex][colIndex]"
+        [canGo]="isCellAvailable(rowIndex, colIndex)" 
         (cellClick)="moveKnight(rowIndex, colIndex)">
       </app-cell>
     </ng-container>
