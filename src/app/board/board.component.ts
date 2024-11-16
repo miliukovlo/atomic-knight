@@ -16,6 +16,7 @@ export class BoardComponent {
   boardSize: number = 10;
   board: boolean[][]; 
   moves: number[][]; 
+  firstMove: boolean = true;
   win: boolean = false;
   lose: boolean = false;
   currentMove: number = 0; 
@@ -26,11 +27,21 @@ export class BoardComponent {
   constructor() {
     this.board = Array.from({ length: this.boardSize }, () => Array(this.boardSize).fill(false));
     this.moves = Array.from({ length: this.boardSize }, () => Array(this.boardSize).fill(0));
-    this.knightPosition = { row: 0, col: 0 };
+    this.knightPosition = { row: -1, col: -1 };
     this.wasKnight = [];
-    this.validMoves = this.getValidMoves() 
-    this.placeKnight(0, 0);
+    this.validMoves = [];
   }
+
+  reset() {
+    this.wasKnight = [];
+    this.currentMove = 0;
+    this.win = false;
+    this.lose = false;
+    this.knightPosition = { row: -1, col: -1 };
+    this.moves = Array.from({ length: this.boardSize }, () => Array(this.boardSize).fill(0));
+    this.validMoves = [];
+    this.firstMove = true;
+}
 
   placeKnight(row: number, col: number) {
     this.board[row][col] = true;
@@ -40,19 +51,27 @@ export class BoardComponent {
   }
 
   moveKnight(newRow: number, newCol: number) {
-    if (!this.wasKnight.some(pos => pos.row === newRow && pos.col === newCol)) {
-      const validMoves = this.getValidMoves();
-      if (validMoves.some(move => move.row === newRow && move.col === newCol)) {
-        this.board[this.knightPosition.row][this.knightPosition.col] = false; 
-        this.placeKnight(newRow, newCol);
-        this.validMoves = this.getValidMoves();
-        if (this.validMoves.length === 0) {
-          this.lose = true;
+    if (this.firstMove) {
+      this.placeKnight(newRow, newCol);
+      this.validMoves = this.getValidMoves();
+      this.firstMove = false;
+    } else {
+      if (!this.wasKnight.some(pos => pos.row === newRow && pos.col === newCol)) {
+        const validMoves = this.getValidMoves();
+        if (validMoves.some(move => move.row === newRow && move.col === newCol)) {
+          this.board[this.knightPosition.row][this.knightPosition.col] = false; 
+          this.placeKnight(newRow, newCol);
+          this.validMoves = this.getValidMoves();
+          if (this.currentMove === this.boardSize * this.boardSize) {
+            this.win = true;
+          }
+          if (this.validMoves.length === 0 && this.win !== true) {
+            this.lose = true;
+          }
         }
       }
     }
   }
-  
 
   getValidMoves() {
     const moves = [
@@ -67,8 +86,7 @@ export class BoardComponent {
       const newRow = this.knightPosition.row + move.row;
       const newCol = this.knightPosition.col + move.col;
       if (this.isInBounds(newRow, newCol) && !this.wasKnight.some(pos => pos.row === newRow && pos.col === newCol)) {
-        const canGo = !this.wasKnight.some(pos => pos.row === newRow && pos.col === newCol);
-        validMoves.push({ row: newRow, col: newCol, canGo });
+        validMoves.push({ row: newRow, col: newCol, canGo: true });
       }
     }
     return validMoves;
@@ -77,6 +95,7 @@ export class BoardComponent {
   isInBounds(row: number, col: number) {
     return row >= 0 && row < this.boardSize && col >= 0 && col < this.boardSize;
   }
+
   isCellAvailable(rowIndex: number, colIndex: number): boolean {
     return this.validMoves.some(move => move.row === rowIndex && move.col === colIndex);
   }

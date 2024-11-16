@@ -1,5 +1,5 @@
-<div [ngClass]="id % 2 === 0 ? 'cell' : 'cell even'" (click)="onClick()">
+<article [ngClass]="getCellClass()" (click)="onClick()">
     <app-horse class="horse-block" *ngIf="isKnight"></app-horse>
-    <div *ngIf="canGo && !moveNumber" [ngClass]="id % 2 === 0 ? 'dot even': 'dot odd'"></div>
+    <div *ngIf="canGo && !moveNumber" [ngClass]="getDotClass()"></div>
     <span *ngIf="moveNumber > 0 && !isKnight" class="move-number">{{ moveNumber }}</span>
-</div>
+</article>

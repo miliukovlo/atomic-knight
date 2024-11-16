@@ -9,6 +9,10 @@
 }
 .even {
     background-color: orangered;
+    color: white;
+}
+.move-number {
+    font-size: 2vh;
 }
 .odd {
     background-color: white;
@@ -17,6 +21,9 @@
     height: 3vh;
     width: 3vh;
     border-radius: 50%;
+}
+.disabled {
+    cursor: not-allowed;
 }
 .horse-block {
     width: 50%;
